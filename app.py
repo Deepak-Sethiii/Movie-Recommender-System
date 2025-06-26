@@ -12,11 +12,10 @@ with open("movie_dict.pkl", "rb") as f:
 
 movies = pd.DataFrame(movies)
 
-# Load similarity matrix from Google Drive
+# Load similarity matrix from Hugging Face (not Google Drive)
 @st.cache_data
 def load_similarity():
-    FILE_ID = "1-f24GkjPaZbGG7aC6vJcwm9bkR9Tifcp"  # Replace with your own file ID
-    URL = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
+    URL = "https://huggingface.co/dpk-sethiii/movie-files/resolve/main/similarity.pkl"  # replace with your raw link
     response = requests.get(URL)
     return pickle.load(io.BytesIO(response.content))
 
