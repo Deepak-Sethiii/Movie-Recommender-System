@@ -27,6 +27,22 @@ def fetch_poster(movie_id):
 
     # Fallback if all retries fail
     return "https://via.placeholder.com/500x750?text=Failed+to+Fetch"
+    
+import io
+
+# Load movies dict (still local)
+with open("movie_dict.pkl", "rb") as f:
+    movies = pickle.load(f)
+
+# Load similarity.pkl from Google Drive using raw download
+@st.cache_data
+def load_similarity():
+    FILE_ID = "1-f24GkjPaZbGG7aC6vJcwm9bkR9Tifcp"  # Replace with your actual file ID
+    URL = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
+    response = requests.get(URL)
+    return pickle.load(io.BytesIO(response.content))
+
+similarity = load_similarity()
 
 def recommend(movie):
     movie_index = movies[movies['title'] == movie].index[0]
@@ -81,25 +97,7 @@ if st.button('Recommend'):
         st.image(posters[4])
         
 
-import streamlit as st
-import pandas as pd
-import pickle
-import requests
-import io
 
-# Load movies dict (still local)
-with open("movie_dict.pkl", "rb") as f:
-    movies = pickle.load(f)
-
-# Load similarity.pkl from Google Drive using raw download
-@st.cache_data
-def load_similarity():
-    FILE_ID = "1-f24GkjPaZbGG7aC6vJcwm9bkR9Tifcp"  # Replace with your actual file ID
-    URL = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
-    response = requests.get(URL)
-    return pickle.load(io.BytesIO(response.content))
-
-similarity = load_similarity()
 
 
 
