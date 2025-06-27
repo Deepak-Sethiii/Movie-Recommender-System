@@ -44,6 +44,7 @@ def fetch_poster(movie_id):
             print(f"[Attempt {attempt + 1}] Poster fetch error: {e}")
             time.sleep(1)
     return "https://via.placeholder.com/500x750?text=No+Poster"
+    
 
 # --------- Recommend Movies ---------
 def recommend(movie):
@@ -53,26 +54,26 @@ def recommend(movie):
         st.error("❌ Movie not found in dataset.")
         return [], []
 
-distances = np.array(similarity[movie_index])  # Ensure numeric indexing
+    distances = np.array(similarity[movie_index])  # Ensure numeric indexing
 
-movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
+    movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
 
-recommended_titles = []
-recommended_posters = []
+    recommended_titles = []
+    recommended_posters = []
 
-for idx, _ in movie_list:
-    try:
-        row = movies.iloc[idx]
-        movie_id = row['movie_id']
-        title = row['title']
-    except (KeyError, IndexError):
-        continue
+    for idx, _ in movie_list:
+        try:
+            row = movies.iloc[idx]
+            movie_id = row['movie_id']
+            title = row['title']
+        except (KeyError, IndexError):
+            continue
 
-    recommended_titles.append(title)
-    recommended_posters.append(fetch_poster(movie_id))
-   
-return recommended_titles, recommended_posters
-    
+        recommended_titles.append(title)
+        recommended_posters.append(fetch_poster(movie_id))
+
+    return recommended_titles, recommended_posters
+
 
 
 
