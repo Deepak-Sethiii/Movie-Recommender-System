@@ -4,6 +4,7 @@ import pandas as pd
 import requests
 import time
 import io
+import numpy as np
 
 # --------- Load Movie Data ---------
 with open("movie_dict.pkl", "rb") as f:
@@ -52,23 +53,28 @@ def recommend(movie):
         st.error("❌ Movie not found in dataset.")
         return [], []
 
-    distances = similarity[movie_index]
-    movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
+distances = np.array(similarity[movie_index])  # Ensure numeric indexing
 
-    recommended_titles = []
-    recommended_posters = []
+movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
 
-    for idx, _ in movie_list:
-        try:
-            movie_id = movies.iloc[idx]['movie_id']
-            title = movies.iloc[idx]['title']
-        except (KeyError, IndexError):
-            continue
+recommended_titles = []
+recommended_posters = []
 
-        recommended_titles.append(title)
-        recommended_posters.append(fetch_poster(movie_id))
+for idx, _ in movie_list:
+    try:
+        row = movies.iloc[idx]
+        movie_id = row['movie_id']
+        title = row['title']
+    except (KeyError, IndexError):
+        continue
 
-    return recommended_titles, recommended_posters
+    recommended_titles.append(title)
+    recommended_posters.append(fetch_poster(movie_id))
+
+return recommended_titles, recommended_posters
+
+
+
 
 # --------- Streamlit UI ---------
 st.title("🎬 Movie Recommender System")
