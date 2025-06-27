@@ -70,7 +70,8 @@ for idx, _ in movie_list:
 
     recommended_titles.append(title)
     recommended_posters.append(fetch_poster(movie_id))
-    return recommended_titles, recommended_posters
+   
+return recommended_titles, recommended_posters
     
 
 
